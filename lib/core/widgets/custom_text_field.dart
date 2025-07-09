@@ -3,7 +3,8 @@ import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
 
 class CustomTextField extends StatefulWidget {
   final String labelText;
-  final IconData? prefixIcon;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
   final TextEditingController? controller;
   final FocusNode? focusNode;
   final bool obscureText;
@@ -15,6 +16,7 @@ class CustomTextField extends StatefulWidget {
     super.key,
     required this.labelText,
     this.prefixIcon,
+    this.suffixIcon,
     this.controller,
     this.focusNode,
     this.obscureText = false,
@@ -44,7 +46,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
 
   @override
   Widget build(BuildContext context) {
-    final textTheme = Theme.of(context).textTheme;
+    final theme = Theme.of(context);
+    final textTheme = theme.textTheme;
+
+    final iconThemeData = theme.iconTheme.copyWith(
+      size: 17,
+      color: kColorWhite,
+    );
 
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
@@ -74,7 +82,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (widget.prefixIcon != null) ...[
-              Icon(widget.prefixIcon, color: kColorWhite),
+              IconTheme(data: iconThemeData, child: widget.prefixIcon!),
               const SizedBox(width: 9.33),
             ],
             Expanded(
@@ -98,6 +106,10 @@ class _CustomTextFieldState extends State<CustomTextField> {
                 style: textTheme.bodyMedium?.copyWith(color: Colors.white),
               ),
             ),
+            if (widget.suffixIcon != null) ...[
+              const SizedBox(width: 9.33),
+              IconTheme(data: iconThemeData, child: widget.suffixIcon!),
+            ],
           ],
         ),
       ),
