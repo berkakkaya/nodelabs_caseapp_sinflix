@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
 import 'package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart';
 import 'package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart';
 import 'package:nodelabs_caseapp_sinflix/core/widgets/social_media_buttons_group.dart';
@@ -83,19 +84,12 @@ class _SignInScreenState extends State<SignInScreen> {
                           TextSpan(
                             text: "Hesabın yok mu? ",
                             style: textTheme.bodyMedium?.copyWith(
-                              color: textTheme.bodyMedium?.color?.withValues(
-                                alpha: 0.6,
-                              ),
+                              color: kColorWhiteA50,
                             ),
                           ),
                           TextSpan(
                             text: "Kayıt Ol!",
-                            style: textTheme.bodyMedium?.copyWith(
-                              color: textTheme.bodyMedium?.color?.withValues(
-                                alpha: 1.0,
-                              ),
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: textTheme.bodyMedium,
                           ),
                         ],
                       ),
