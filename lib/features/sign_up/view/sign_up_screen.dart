@@ -106,7 +106,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   SizedBox(height: 38),
                   FilledButton(onPressed: () {}, child: Text("Şimdi Kaydol")),
                   SizedBox(height: 36.92),
-                  SocialMediaButtonsGroup(),
+                  SocialMediaButtonsGroup(
+                    onGoogleBtnTapped: () {},
+                    onAppleBtnTapped: () {},
+                    onFacebookBtnTapped: () {},
+                  ),
                   SizedBox(height: 32.27),
                   GestureDetector(
                     onTap: goBack,

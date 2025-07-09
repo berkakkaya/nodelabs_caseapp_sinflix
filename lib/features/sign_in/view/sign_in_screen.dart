@@ -74,7 +74,11 @@ class _SignInScreenState extends State<SignInScreen> {
                   SizedBox(height: 24),
                   FilledButton(onPressed: () {}, child: Text("Giriş Yap")),
                   SizedBox(height: 36.92),
-                  SocialMediaButtonsGroup(),
+                  SocialMediaButtonsGroup(
+                    onGoogleBtnTapped: () {},
+                    onAppleBtnTapped: () {},
+                    onFacebookBtnTapped: () {},
+                  ),
                   SizedBox(height: 32.27),
                   GestureDetector(
                     onTap: goToSignUpScreen,
