@@ -41,7 +41,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         flex: 7,
                         child: Text(
                           "Bir sürü film içeriği ve büyük bir topluluk, burada seni bekliyor.",
-                          style: textTheme.titleMedium,
+                          style: textTheme.titleSmall,
                           textAlign: TextAlign.center,
                         ),
                       ),

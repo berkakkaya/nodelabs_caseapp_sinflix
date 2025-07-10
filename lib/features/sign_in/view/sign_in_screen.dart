@@ -42,7 +42,7 @@ class _SignInScreenState extends State<SignInScreen> {
                         flex: 7,
                         child: Text(
                           "Filmleri kaldığınız yerden keşfetmeye devam edin.",
-                          style: textTheme.titleMedium,
+                          style: textTheme.titleSmall,
                           textAlign: TextAlign.center,
                         ),
                       ),
