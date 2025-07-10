@@ -51,6 +51,22 @@ class App extends StatelessWidget {
             ),
           ),
         ),
+        iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(
+            padding: WidgetStatePropertyAll(EdgeInsets.all(10.17)),
+            iconColor: WidgetStatePropertyAll(kColorWhite),
+            backgroundColor: WidgetStatePropertyAll(kColorWhiteA10),
+            iconSize: WidgetStatePropertyAll(24),
+            shape: WidgetStatePropertyAll(
+              CircleBorder(
+                side: BorderSide(
+                  color: kColorWhiteA20,
+                  strokeAlign: BorderSide.strokeAlignInside,
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       home: const SignInScreen(),
     );
