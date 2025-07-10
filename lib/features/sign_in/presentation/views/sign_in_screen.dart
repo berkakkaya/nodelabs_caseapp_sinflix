@@ -4,6 +4,7 @@ import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/social_media_buttons_group.dart";
+import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
 import "package:nodelabs_caseapp_sinflix/features/sign_up/presentation/views/sign_up_screen.dart";
 
 class SignInScreen extends StatefulWidget {
@@ -66,7 +67,10 @@ class _SignInScreenState extends State<SignInScreen> {
                     textAlign: TextAlign.start,
                   ),
                   SizedBox(height: 24),
-                  FilledButton(onPressed: () {}, child: Text("Giriş Yap")),
+                  FilledButton(
+                    onPressed: goToHomeScreen,
+                    child: Text("Giriş Yap"),
+                  ),
                   SizedBox(height: 36.92),
                   SocialMediaButtonsGroup(
                     onGoogleBtnTapped: () {},
@@ -109,5 +113,15 @@ class _SignInScreenState extends State<SignInScreen> {
     Navigator.of(
       context,
     ).push(MaterialPageRoute(builder: (context) => SignUpScreen()));
+  }
+
+  void goToHomeScreen() {
+    // TODO: Implement proper sign in logic
+    // This is a placeholder for the actual navigation logic.
+
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => const HomeScreen()),
+      (route) => false,
+    );
   }
 }
