@@ -1,7 +1,7 @@
 import "package:flutter/material.dart";
 import "package:google_fonts/google_fonts.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
-import "package:nodelabs_caseapp_sinflix/features/sign_in/view/sign_in_screen.dart";
+import "package:nodelabs_caseapp_sinflix/features/sign_in/presentation/views/sign_in_screen.dart";
 
 void main() {
   runApp(const App());
