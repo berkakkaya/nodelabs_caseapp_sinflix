@@ -3,6 +3,7 @@ import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
 import 'package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart';
 import 'package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart';
 import 'package:nodelabs_caseapp_sinflix/core/widgets/social_media_buttons_group.dart';
+import 'package:nodelabs_caseapp_sinflix/features/add_profile_photo/view/add_profile_photo_screen.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -104,7 +105,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   SizedBox(height: 38),
-                  FilledButton(onPressed: () {}, child: Text("Şimdi Kaydol")),
+                  FilledButton(
+                    onPressed: goToAddProfilePhotoScreen,
+                    child: Text("Şimdi Kaydol"),
+                  ),
                   SizedBox(height: 36.92),
                   SocialMediaButtonsGroup(
                     onGoogleBtnTapped: () {},
@@ -145,5 +149,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
     // TODO: Move this to a more appropriate place, like a navigation service.
 
     Navigator.of(context).pop();
+  }
+
+  void goToAddProfilePhotoScreen() {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const AddProfilePhotoScreen()),
+    );
   }
 }
