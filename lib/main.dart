@@ -36,7 +36,7 @@ class App extends StatelessWidget {
             fontWeight: FontWeight.w400,
             fontSize: 13,
           ),
-          bodyMedium: GoogleFonts.poppins(color: kColorWhite),
+          bodyMedium: GoogleFonts.poppins(color: kColorWhite, fontSize: 12),
         ),
         filledButtonTheme: FilledButtonThemeData(
           style: ButtonStyle(
