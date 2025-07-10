@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
 import 'package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart';
 import 'package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart';
+import 'package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart';
 import 'package:nodelabs_caseapp_sinflix/core/widgets/social_media_buttons_group.dart';
 import 'package:nodelabs_caseapp_sinflix/features/add_profile_photo/view/add_profile_photo_screen.dart';
 
@@ -35,19 +36,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     textAlign: TextAlign.center,
                   ),
                   SizedBox(height: 8),
-                  Row(
-                    children: [
-                      Spacer(flex: 1),
-                      Flexible(
-                        flex: 7,
-                        child: Text(
-                          "Bir sürü film içeriği ve büyük bir topluluk, burada seni bekliyor.",
-                          style: textTheme.titleSmall,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      Spacer(flex: 1),
-                    ],
+                  FlexibleRowSpacer(
+                    child: Text(
+                      "Bir sürü film içeriği ve büyük bir topluluk, burada seni bekliyor.",
+                      style: textTheme.titleSmall,
+                      textAlign: TextAlign.center,
+                    ),
                   ),
                   SizedBox(height: 40),
                   CustomTextField(

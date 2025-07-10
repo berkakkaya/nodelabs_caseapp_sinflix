@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart';
 import 'package:nodelabs_caseapp_sinflix/core/widgets/custom_appbar.dart';
+import 'package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart';
 import 'package:nodelabs_caseapp_sinflix/features/add_profile_photo/view/widgets/add_profile_photo_widget.dart';
 
 class AddProfilePhotoScreen extends StatefulWidget {
@@ -32,33 +33,20 @@ class _AddProfilePhotoScreenState extends State<AddProfilePhotoScreen> {
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 8.24),
-              Row(
-                children: [
-                  Spacer(flex: 1),
-                  Flexible(
-                    flex: 7,
-                    child: Text(
-                      "Profil fotoğrafınız, toplulukta sizi temsil edecek.",
-                      style: textTheme.titleSmall,
-                      textAlign: TextAlign.center,
-                    ),
-                  ),
-                  Spacer(flex: 1),
-                ],
+              FlexibleRowSpacer(
+                child: Text(
+                  "Profil fotoğrafınız, toplulukta sizi temsil edecek.",
+                  style: textTheme.titleSmall,
+                  textAlign: TextAlign.center,
+                ),
               ),
               SizedBox(height: 47.67),
-              Row(
-                children: [
-                  Spacer(flex: 1),
-                  Flexible(
-                    flex: 7,
-                    child: AddProfilePhotoWidget(
-                      onTap: () {},
-                      child: Icon(CustomIcons.plus, size: 26),
-                    ),
-                  ),
-                  Spacer(flex: 1),
-                ],
+              FlexibleRowSpacer(
+                childFlex: 3,
+                child: AddProfilePhotoWidget(
+                  onTap: () {},
+                  child: Icon(CustomIcons.plus, size: 26),
+                ),
               ),
               Spacer(),
               FilledButton(onPressed: () {}, child: Text("Devam Et")),
