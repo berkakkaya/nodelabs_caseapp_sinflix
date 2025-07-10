@@ -1,6 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
-import 'package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart';
+import "package:flutter/material.dart";
+import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
+import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 
 /// A widget that displays a horizontal group of social media login buttons.
 ///

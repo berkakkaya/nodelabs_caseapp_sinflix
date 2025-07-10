@@ -1,4 +1,4 @@
-import 'dart:ui';
+import "dart:ui";
 
 const kColorBrand = Color(0xFFE50914);
 

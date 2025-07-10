@@ -1,9 +1,9 @@
-import 'package:flutter/widgets.dart';
+import "package:flutter/widgets.dart";
 
 class CustomIcons {
   CustomIcons._();
 
-  static const String _fontFamily = 'CustomIcons';
+  static const String _fontFamily = "CustomIcons";
 
   static const IconData messageOutlined = IconData(
     0xe909,

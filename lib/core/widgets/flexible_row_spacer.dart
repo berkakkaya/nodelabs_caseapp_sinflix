@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import "package:flutter/material.dart";
 
 /// A reusable widget that creates a row with flexible spacers on the sides
 /// and a centered child widget.

@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
+import "package:flutter/material.dart";
+import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
 
 /// A widget for displaying and selecting profile photos with a consistent
 /// circular design.

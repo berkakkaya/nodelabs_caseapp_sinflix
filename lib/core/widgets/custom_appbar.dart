@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart';
+import "package:flutter/material.dart";
+import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 
 /// A custom app bar widget with automatic back button and flexible layout.
 ///

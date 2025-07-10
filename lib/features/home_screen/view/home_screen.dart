@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nodelabs_caseapp_sinflix/features/home_screen/viewmodel/home_screen_viewmodel.dart';
-import 'package:nodelabs_caseapp_sinflix/features/home_discover_tab/view/home_discover_tab.dart';
-import 'package:nodelabs_caseapp_sinflix/features/home_profile_tab/view/profile_tab.dart';
-import '../viewmodel/home_tab_state.dart';
+import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
+import "package:nodelabs_caseapp_sinflix/features/home_screen/viewmodel/home_screen_viewmodel.dart";
+import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/view/home_discover_tab.dart";
+import "package:nodelabs_caseapp_sinflix/features/home_profile_tab/view/profile_tab.dart";
+import "../viewmodel/home_tab_state.dart";
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,11 +30,11 @@ class HomeScreen extends StatelessWidget {
               items: const [
                 BottomNavigationBarItem(
                   icon: Icon(Icons.home),
-                  label: 'Anasayfa',
+                  label: "Anasayfa",
                 ),
                 BottomNavigationBarItem(
                   icon: Icon(Icons.person),
-                  label: 'Profil',
+                  label: "Profil",
                 ),
               ],
             ),

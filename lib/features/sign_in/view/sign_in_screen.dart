@@ -1,10 +1,10 @@
-import 'package:flutter/material.dart';
-import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
-import 'package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart';
-import 'package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart';
-import 'package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart';
-import 'package:nodelabs_caseapp_sinflix/core/widgets/social_media_buttons_group.dart';
-import 'package:nodelabs_caseapp_sinflix/features/sign_up/view/sign_up_screen.dart';
+import "package:flutter/material.dart";
+import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
+import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
+import "package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart";
+import "package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart";
+import "package:nodelabs_caseapp_sinflix/core/widgets/social_media_buttons_group.dart";
+import "package:nodelabs_caseapp_sinflix/features/sign_up/view/sign_up_screen.dart";
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

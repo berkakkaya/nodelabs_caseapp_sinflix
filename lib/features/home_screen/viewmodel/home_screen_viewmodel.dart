@@ -1,5 +1,5 @@
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'home_tab_state.dart';
+import "package:flutter_bloc/flutter_bloc.dart";
+import "home_tab_state.dart";
 
 class HomeScreenViewModel extends Bloc<HomeTabChangeEvent, TabState> {
   HomeScreenViewModel() : super(const TabState()) {

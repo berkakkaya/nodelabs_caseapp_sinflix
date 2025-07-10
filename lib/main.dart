@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
-import 'package:nodelabs_caseapp_sinflix/features/sign_in/view/sign_in_screen.dart';
+import "package:flutter/material.dart";
+import "package:google_fonts/google_fonts.dart";
+import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
+import "package:nodelabs_caseapp_sinflix/features/sign_in/view/sign_in_screen.dart";
 
 void main() {
   runApp(const App());
@@ -12,7 +12,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'SinFlix',
+      title: "SinFlix",
       darkTheme: ThemeData(
         brightness: Brightness.dark,
         colorScheme: ColorScheme.fromSeed(
