@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:nodelabs_caseapp_sinflix/core/consts/colors.dart';
 
-/// A widget for displaying and selecting profile photos with a consistent circular design.
+/// A widget for displaying and selecting profile photos with a consistent
+/// circular design.
 ///
 /// This widget provides a square container with rounded corners that maintains
-/// a 1:1 aspect ratio, making it perfect for profile photo selection interfaces.
-/// It features Material Design touch feedback and can display either a placeholder
-/// icon (like a plus sign) or an actual profile image.
+/// a 1:1 aspect ratio, making it perfect for profile photo selection
+/// interfaces. It features Material Design touch feedback and can display
+/// either a placeholder icon (like a plus sign) or an actual profile image.
 ///
 /// The widget features:
 /// - 1:1 aspect ratio container for consistent sizing
