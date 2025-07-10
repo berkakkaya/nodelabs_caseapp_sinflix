@@ -22,7 +22,35 @@ class MovieView extends StatelessWidget {
       child: Stack(
         children: [
           Positioned.fill(
-            child: Image(image: imgProvider, fit: BoxFit.cover),
+            child: Image(
+              image: imgProvider,
+              fit: BoxFit.cover,
+              frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+                if (wasSynchronouslyLoaded) {
+                  return child;
+                }
+
+                return Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    Container(color: Colors.black12),
+                    if (frame == null)
+                      const Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                            Colors.white,
+                          ),
+                        ),
+                      ),
+                    AnimatedOpacity(
+                      opacity: frame != null ? 1.0 : 0.0,
+                      duration: const Duration(milliseconds: 300),
+                      child: child,
+                    ),
+                  ],
+                );
+              },
+            ),
           ),
           Positioned(
             bottom: 0,
