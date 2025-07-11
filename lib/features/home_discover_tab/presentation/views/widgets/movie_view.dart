@@ -89,32 +89,20 @@ class _LikeButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: Colors.transparent,
-      shape: const StadiumBorder(),
+      color: kColorBlack.withValues(alpha: 0.60),
+      shape: StadiumBorder(
+        side: BorderSide(
+          color: kColorWhiteA20,
+          width: 1,
+          strokeAlign: BorderSide.strokeAlignInside,
+        ),
+      ),
       child: InkWell(
         borderRadius: BorderRadius.circular(35.585),
         onTap: () {
           // TODO: Implement like button tap
         },
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(35.585),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-            child: DecoratedBox(
-              decoration: ShapeDecoration(
-                shape: StadiumBorder(
-                  side: BorderSide(
-                    color: kColorWhiteA20,
-                    width: 1,
-                    strokeAlign: BorderSide.strokeAlignInside,
-                  ),
-                ),
-                color: kColorBlackA20,
-              ),
-              child: Center(child: Icon(CustomIcons.like, size: 24)),
-            ),
-          ),
-        ),
+        child: Center(child: Icon(CustomIcons.like, size: 24)),
       ),
     );
   }
