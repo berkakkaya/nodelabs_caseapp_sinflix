@@ -39,7 +39,7 @@ class LikedMovieWidget extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
         ),
         Text(
-          title,
+          description,
           style: Theme.of(
             context,
           ).textTheme.bodyMedium?.copyWith(color: kColorWhiteA50),
