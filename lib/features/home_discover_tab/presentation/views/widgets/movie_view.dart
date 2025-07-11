@@ -1,4 +1,3 @@
-import "dart:ui";
 
 import "package:flutter/material.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
