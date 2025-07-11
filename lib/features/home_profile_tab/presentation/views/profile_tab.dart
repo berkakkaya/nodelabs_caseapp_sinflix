@@ -1,9 +1,12 @@
+import "dart:ui";
+
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/custom_appbar.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_profile_tab/presentation/views/widgets/liked_movie_widget.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_profile_tab/presentation/views/widgets/profile_details_widget.dart";
+import "package:nodelabs_caseapp_sinflix/features/limited_offer_popup/presentation/views/limited_offer_popup.dart";
 
 class HomeScreenProfileTab extends StatelessWidget {
   const HomeScreenProfileTab({super.key});
@@ -26,7 +29,7 @@ class HomeScreenProfileTab extends StatelessWidget {
                 child: CustomAppbar(
                   title: Text("Profil Detayı"),
                   suffix: FilledButton.icon(
-                    onPressed: () {},
+                    onPressed: () => openLimitedOfferBottomSheet(context),
                     label: Text(
                       "Sınırlı Teklif",
                       overflow: TextOverflow.ellipsis,
@@ -90,6 +93,14 @@ class HomeScreenProfileTab extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+
+  void openLimitedOfferBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) => LimitedOfferPopup(),
     );
   }
 }
