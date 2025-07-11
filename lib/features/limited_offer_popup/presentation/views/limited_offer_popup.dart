@@ -87,21 +87,18 @@ class LimitedOfferPopup extends StatelessWidget {
                     Expanded(
                       child: BonusItem(
                         iconImgProvider: const AssetImage(kImgCoupleHearts),
-                        icon: Icons.favorite,
                         title: "Daha Fazla Eşleşme",
                       ),
                     ),
                     Expanded(
                       child: BonusItem(
                         iconImgProvider: const AssetImage(kImgArrowUp),
-                        icon: Icons.arrow_upward,
                         title: "Öne Çıkarma",
                       ),
                     ),
                     Expanded(
                       child: BonusItem(
                         iconImgProvider: const AssetImage(kImgHeart),
-                        icon: Icons.favorite_border,
                         title: "Daha Fazla Beğeni",
                       ),
                     ),
