@@ -27,7 +27,7 @@ class FlexibleRowSpacer extends StatelessWidget {
     return Row(
       children: [
         Spacer(flex: spacerFlex),
-        Flexible(flex: childFlex, child: child),
+        Expanded(flex: childFlex, child: child),
         Spacer(flex: spacerFlex),
       ],
     );
