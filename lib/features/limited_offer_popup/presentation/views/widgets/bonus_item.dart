@@ -4,13 +4,11 @@ import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
 
 class BonusItem extends StatelessWidget {
   final ImageProvider iconImgProvider;
-  final IconData icon;
   final String title;
 
   const BonusItem({
     super.key,
     required this.iconImgProvider,
-    this.icon = Icons.diamond,
     required this.title,
   });
 
