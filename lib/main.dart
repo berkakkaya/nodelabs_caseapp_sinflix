@@ -21,6 +21,11 @@ class App extends StatelessWidget {
         ),
         scaffoldBackgroundColor: kColorBlack,
         textTheme: GoogleFonts.poppinsTextTheme().copyWith(
+          headlineSmall: GoogleFonts.poppins(
+            color: kColorWhite,
+            fontWeight: FontWeight.w600,
+            fontSize: 20,
+          ),
           titleLarge: GoogleFonts.poppins(
             color: kColorWhite,
             fontWeight: FontWeight.w600,
