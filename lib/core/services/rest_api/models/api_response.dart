@@ -6,9 +6,9 @@ typedef JsonResponse = Map<String, dynamic>;
 ///
 /// Contains optional [data] and [statusCode].
 /// Ensures [statusCode] is within the valid HTTP range (100-599).
-sealed class ApiResponse extends Equatable {
+sealed class ApiResponse<T> extends Equatable {
   /// The data returned from the API, if any.
-  final JsonResponse? data;
+  final T? data;
 
   /// The HTTP status code of the response.
   /// Must be between 100 and 599 if provided.
@@ -30,6 +30,15 @@ sealed class ApiResponse extends Equatable {
     return statusCode! >= 200 && statusCode! < 300;
   }
 
+  /// Transforms the [data] using the provided [transform] function.
+  ///
+  /// The [transform] function should take the original data type [T]
+  /// and return a new type [D]. Transformation function is only applied
+  /// if [data] is not null.
+  ///
+  /// Returns a new [ApiResponse] with the transformed data.
+  ApiResponse<D>? transform<D>(D Function(T rawData) transform);
+
   @override
   List<Object?> get props => [data, statusCode];
 
@@ -40,15 +49,23 @@ sealed class ApiResponse extends Equatable {
 /// Represents a successful API response.
 ///
 /// Always returns `true` for [isOk].
-class ApiSuccessRes extends ApiResponse {
+class ApiSuccessRes<T> extends ApiResponse<T> {
   /// Creates an [ApiSuccessRes] with the given [data] and [statusCode].
-  const ApiSuccessRes({
-    required JsonResponse super.data,
-    required int super.statusCode,
-  }) : assert(
-         statusCode >= 200 && statusCode < 400,
-         "statusCode must be in between the 2xx and 4xx range for success responses",
-       );
+  const ApiSuccessRes({required T super.data, required int super.statusCode})
+    : assert(
+        statusCode >= 200 && statusCode < 400,
+        "statusCode must be in between the 2xx and 4xx range for success responses",
+      );
+
+  @override
+  ApiSuccessRes<D>? transform<D>(D Function(T rawData) transform) {
+    if (data == null) {
+      return null;
+    }
+
+    final transformedData = transform(data as T);
+    return ApiSuccessRes<D>(data: transformedData, statusCode: statusCode!);
+  }
 
   /// Always returns `true` to indicate a successful response.
   @override
@@ -63,7 +80,7 @@ class ApiSuccessRes extends ApiResponse {
 /// Represents an error API response.
 ///
 /// Always returns `false` for [isOk].
-class ApiErrorRes extends ApiResponse {
+class ApiErrorRes<T> extends ApiResponse<T> {
   /// Creates an [ApiErrorRes] with optional [data] and optional [statusCode].
   const ApiErrorRes({super.data, super.statusCode})
     : assert(
@@ -74,6 +91,16 @@ class ApiErrorRes extends ApiResponse {
   /// Always returns `false` to indicate an error response.
   @override
   bool get isOk => false;
+
+  @override
+  ApiErrorRes<D>? transform<D>(D Function(T rawData) transform) {
+    if (data == null) {
+      return null;
+    }
+
+    final transformedData = transform(data as T);
+    return ApiErrorRes<D>(data: transformedData, statusCode: statusCode);
+  }
 
   @override
   String toString() {

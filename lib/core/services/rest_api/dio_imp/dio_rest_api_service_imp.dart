@@ -55,7 +55,7 @@ class DioRestApiServiceImp implements RestApiService {
   }
 
   @override
-  Future<ApiResponse> get(
+  Future<ApiResponse<JsonResponse>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
@@ -84,7 +84,7 @@ class DioRestApiServiceImp implements RestApiService {
   }
 
   @override
-  Future<ApiResponse> post(
+  Future<ApiResponse<JsonResponse>> post(
     String path, {
     ReqInput? data,
     Map<String, dynamic>? queryParameters,
