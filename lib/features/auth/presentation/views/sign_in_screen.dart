@@ -5,7 +5,7 @@ import "package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/social_media_buttons_group.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
-import "package:nodelabs_caseapp_sinflix/features/sign_up/presentation/views/sign_up_screen.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/views/sign_up_screen.dart";
 
 class SignInScreen extends StatefulWidget {
   const SignInScreen({super.key});

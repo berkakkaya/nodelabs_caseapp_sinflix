@@ -19,7 +19,7 @@ import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_bl
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_event.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_state.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
-import "package:nodelabs_caseapp_sinflix/features/sign_in/presentation/views/sign_in_screen.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/views/sign_in_screen.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
