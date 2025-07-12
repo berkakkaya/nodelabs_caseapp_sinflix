@@ -2,7 +2,7 @@ import "package:flutter/material.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/custom_appbar.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart";
-import "package:nodelabs_caseapp_sinflix/features/add_profile_photo/presentation/widgets/add_profile_photo_widget.dart";
+import "package:nodelabs_caseapp_sinflix/features/add_profile_photo/presentation/views/widgets/add_profile_photo_widget.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
 
 class AddProfilePhotoScreen extends StatefulWidget {
