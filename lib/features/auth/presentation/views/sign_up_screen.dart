@@ -1,10 +1,17 @@
 import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_bloc.dart"
+    show AuthBloc;
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_event.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_state.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/pw_field/pw_field_bloc.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/pw_field/pw_field_event.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/pw_field/pw_field_state.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/widgets/social_media_buttons_group.dart";
-import "package:nodelabs_caseapp_sinflix/features/add_profile_photo/presentation/views/add_profile_photo_screen.dart";
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({super.key});
@@ -14,9 +21,25 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final nameSurnameController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+  final confirmPasswordController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameSurnameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
+    final authBloc = context.read<AuthBloc>();
 
     return Scaffold(
       body: CustomScrollView(
@@ -45,25 +68,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                   SizedBox(height: 40),
                   CustomTextField(
+                    controller: nameSurnameController,
                     labelText: "Ad soyad",
                     prefixIcon: Icon(CustomIcons.addUserOutlined),
                     keyboardType: TextInputType.name,
                   ),
                   SizedBox(height: 13.63),
                   CustomTextField(
+                    controller: emailController,
                     labelText: "E-posta",
                     prefixIcon: Icon(CustomIcons.messageOutlined),
                     keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 16.63),
-                  CustomTextField(
-                    labelText: "Şifre",
-                    prefixIcon: Icon(CustomIcons.unlockOutlined),
-                    suffixIcon: Icon(CustomIcons.hideOutlined),
-                    obscureText: true,
+                  BlocProvider(
+                    create: (context) => PwFieldBloc(),
+                    child: BlocBuilder<PwFieldBloc, PwFieldState>(
+                      builder: (context, state) {
+                        return CustomTextField(
+                          controller: passwordController,
+                          labelText: "Şifre",
+                          prefixIcon: Icon(CustomIcons.unlockOutlined),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              final isHidden = state is PwFieldHidden;
+
+                              context.read<PwFieldBloc>().add(
+                                isHidden
+                                    ? PwFieldShowEvent()
+                                    : PwFieldHideEvent(),
+                              );
+                            },
+                            child: Icon(CustomIcons.hideOutlined),
+                          ),
+                          obscureText: state is PwFieldHidden,
+                        );
+                      },
+                    ),
                   ),
                   SizedBox(height: 13.63),
                   CustomTextField(
+                    controller: confirmPasswordController,
                     labelText: "Şifre Tekrar",
                     prefixIcon: Icon(CustomIcons.unlockOutlined),
                     obscureText: true,
@@ -99,9 +144,36 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   SizedBox(height: 38),
-                  FilledButton(
-                    onPressed: goToAddProfilePhotoScreen,
-                    child: Text("Şimdi Kaydol"),
+                  BlocConsumer<AuthBloc, AuthState>(
+                    listenWhen: (previous, current) {
+                      return current is SignUpError;
+                    },
+                    listener: _handleSignUpEvents,
+                    builder: (context, state) {
+                      return FilledButton(
+                        onPressed: state is! SigningUp
+                            ? () => signUp(authBloc)
+                            : null,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 16,
+                          children: [
+                            if (state is SigningUp)
+                              SizedBox.square(
+                                dimension: 12,
+                                child: CircularProgressIndicator(),
+                              ),
+                            Text(
+                              state is SigningUp
+                                  ? "Kayıt yapılıyor..."
+                                  : "Şimdi Kaydol",
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(height: 36.92),
                   SocialMediaButtonsGroup(
@@ -139,15 +211,52 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
+  void _handleSignUpEvents(BuildContext context, AuthState state) {
+    if (state is SignUpError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Kayıt başarısız. Lütfen girdilerinizi ve e-postanızın benzersiz "
+            "olup olmadığını kontrol ediniz.",
+          ),
+        ),
+      );
+    }
+  }
+
+  void signUp(AuthBloc authBloc) {
+    final pw = passwordController.text;
+    final confirmPw = confirmPasswordController.text;
+
+    if (nameSurnameController.text.isEmpty ||
+        emailController.text.isEmpty ||
+        pw.isEmpty ||
+        confirmPw.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Lütfen tüm alanları doldurun.")));
+      return;
+    }
+
+    if (pw != confirmPw) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Şifreler eşleşmiyor!")));
+      return;
+    }
+
+    authBloc.add(
+      SignUpEvent(
+        name: nameSurnameController.text,
+        email: emailController.text,
+        password: passwordController.text,
+      ),
+    );
+  }
+
   void goBack() {
     // TODO: Move this to a more appropriate place, like a navigation service.
 
     Navigator.of(context).pop();
-  }
-
-  void goToAddProfilePhotoScreen() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => const AddProfilePhotoScreen()),
-    );
   }
 }
