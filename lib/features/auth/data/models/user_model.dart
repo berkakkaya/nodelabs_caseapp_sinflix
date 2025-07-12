@@ -23,12 +23,13 @@ class UserModel extends User {
   /// that may come from a different source than the JSON data.
   factory UserModel.fromJson(Map<String, dynamic> json, {String? token}) {
     final String? tokenFromJson = json["token"];
+    final String? profilePhotoUrl = json["photoUrl"];
 
     return UserModel(
       userId: json["id"] ?? "",
       nameSurname: json["name"] ?? "",
       email: json["email"] ?? "",
-      photoUrl: json["photoUrl"],
+      photoUrl: profilePhotoUrl?.isEmpty == true ? null : profilePhotoUrl,
       token: token ?? tokenFromJson,
     );
   }

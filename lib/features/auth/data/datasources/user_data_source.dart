@@ -67,7 +67,7 @@ class UserDataSourceImpl implements UserDataSource {
     }
 
     final String token = response.data!["data"]["token"];
-    return UserModel.fromJson(response.data!, token: token);
+    return UserModel.fromJson(response.data!["data"], token: token);
   }
 
   @override
@@ -88,7 +88,7 @@ class UserDataSourceImpl implements UserDataSource {
     }
 
     final String token = response.data!["data"]["token"];
-    return UserModel.fromJson(response.data!, token: token);
+    return UserModel.fromJson(response.data!["data"], token: token);
   }
 
   @override
