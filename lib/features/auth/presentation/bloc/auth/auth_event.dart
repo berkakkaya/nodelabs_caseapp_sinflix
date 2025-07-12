@@ -1,5 +1,3 @@
-import "dart:typed_data";
-
 import "package:equatable/equatable.dart";
 
 abstract class AuthEvent extends Equatable {
@@ -38,12 +36,4 @@ class SignUpEvent extends AuthEvent {
 
 class SignOutEvent extends AuthEvent {}
 
-class UploadProfilePhotoEvent extends AuthEvent {
-  final Uint8List bytes;
-  final String filename;
-
-  const UploadProfilePhotoEvent({required this.bytes, required this.filename});
-
-  @override
-  List<Object> get props => [bytes, filename];
-}
+class UserDataReloadReqEvent extends AuthEvent {}

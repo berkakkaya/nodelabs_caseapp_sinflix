@@ -21,22 +21,8 @@ class AuthenticatedState extends AuthState {
   List<Object> get props => [user];
 }
 
-class ProfilePhotoUploadSuccess extends AuthState {
-  final String photoUrl;
-
-  const ProfilePhotoUploadSuccess({required this.photoUrl});
-
-  @override
-  List<Object> get props => [photoUrl];
-}
-
-class ProfilePhotoUploadError extends AuthState {
-  final String message;
-
-  const ProfilePhotoUploadError({required this.message});
-
-  @override
-  List<Object> get props => [message];
+class UserReloaded extends AuthenticatedState {
+  const UserReloaded({required super.user});
 }
 
 // Unauthenticated states =================================================

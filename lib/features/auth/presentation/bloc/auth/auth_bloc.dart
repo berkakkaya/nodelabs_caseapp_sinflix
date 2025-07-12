@@ -33,7 +33,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<SignInEvent>(_onSignIn);
     on<SignUpEvent>(_onSignUp);
     on<SignOutEvent>(_onSignOut);
-    on<UploadProfilePhotoEvent>(_onUploadProfilePhoto);
+    on<UserDataReloadReqEvent>(_reloadUserData);
   }
 
   Future<void> _onInitAuthStatus(
@@ -117,24 +117,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(NavigateToSignIn());
   }
 
-  Future<void> _onUploadProfilePhoto(
-    UploadProfilePhotoEvent event,
+  Future<void> _reloadUserData(
+    UserDataReloadReqEvent event,
     Emitter<AuthState> emit,
   ) async {
     try {
-      final newPicUrl = await uploadProfilePhotoUseCase.execute(
-        event.bytes,
-        filename: event.filename,
-      );
+      final user = await getCurrentUserUseCase.execute();
 
-      if (newPicUrl != null) {
-        emit(ProfilePhotoUploadSuccess(photoUrl: newPicUrl));
-        return;
+      if (user != null) {
+        emit(UserReloaded(user: user));
+      } else {
+        emit(NavigateToSignIn());
       }
-
-      emit(ProfilePhotoUploadError(message: "Invalid photo upload"));
     } catch (e) {
-      emit(ProfilePhotoUploadError(message: e.toString()));
+      emit(NavigateToSignIn());
       rethrow;
     }
   }
