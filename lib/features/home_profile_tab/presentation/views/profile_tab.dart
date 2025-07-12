@@ -23,8 +23,8 @@ class HomeScreenProfileTab extends StatelessWidget {
     return SafeArea(
       child: RefreshIndicator(
         onRefresh: () async {
-          // TODO: Implement pull-to-refresh functionality
-          await Future.delayed(Duration(seconds: 1));
+          authBloc.add(UserDataReloadReqEvent());
+          await Future.delayed(const Duration(seconds: 1));
         },
         child: CustomScrollView(
           slivers: [
