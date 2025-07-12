@@ -9,6 +9,26 @@ enum ReqInputType {
   fileUpload,
 }
 
+/// Represents a file upload with its bytes, name, and MIME type.
+class FileUpload {
+  /// The file's bytes.
+  final List<int> bytes;
+
+  /// The name of the file.
+  final String fileName;
+
+  /// The MIME type of the file.
+  final String mimeType;
+
+  /// Creates a [FileUpload] with the specified [bytes], [fileName],
+  /// and [mimeType].
+  const FileUpload({
+    required this.bytes,
+    required this.fileName,
+    required this.mimeType,
+  });
+}
+
 /// Represents the input for a REST API request.
 class ReqInput extends Equatable {
   /// The type of input for the request.

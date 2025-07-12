@@ -104,16 +104,19 @@ class DioRestApiServiceImp implements RestApiService {
         } else if (data.type == ReqInputType.fileUpload) {
           final formData = FormData();
           for (final entry in data.data.entries) {
-            if (entry.value is List<int>) {
-              // Assuming entry.value is a file's bytes
+            if (entry.value is FileUpload) {
               formData.files.add(
                 MapEntry(
                   entry.key,
-                  MultipartFile.fromBytes(entry.value, filename: entry.key),
+                  MultipartFile.fromBytes(
+                    (entry.value as FileUpload).bytes,
+                    filename: (entry.value as FileUpload).fileName,
+                    contentType: DioMediaType.parse(
+                      (entry.value as FileUpload).mimeType,
+                    ),
+                  ),
                 ),
               );
-            } else if (entry.value is MultipartFile) {
-              formData.files.add(MapEntry(entry.key, entry.value));
             } else {
               formData.fields.add(MapEntry(entry.key, entry.value.toString()));
             }
