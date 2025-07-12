@@ -112,12 +112,7 @@ class _SignInScreenState extends State<SignInScreen> {
                     builder: (context, state) {
                       return FilledButton(
                         onPressed: state is! SigningIn
-                            ? () => authBloc.add(
-                                SignInEvent(
-                                  email: emailController.text,
-                                  password: passwordController.text,
-                                ),
-                              )
+                            ? () => signIn(authBloc)
                             : null,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -186,6 +181,22 @@ class _SignInScreenState extends State<SignInScreen> {
         ),
       );
     }
+  }
+
+  void signIn(AuthBloc authBloc) {
+    if (emailController.text.isEmpty || passwordController.text.isEmpty) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Lütfen tüm alanları doldurun.")));
+      return;
+    }
+
+    authBloc.add(
+      SignInEvent(
+        email: emailController.text,
+        password: passwordController.text,
+      ),
+    );
   }
 
   void goToSignUpScreen() {
