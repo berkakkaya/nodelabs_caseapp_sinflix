@@ -1,5 +1,8 @@
 import "package:get_it/get_it.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/api_config.dart";
+import "package:nodelabs_caseapp_sinflix/core/services/local_storage/i_local_storage_service.dart"
+    show LocalStorageService;
+import "package:nodelabs_caseapp_sinflix/core/services/local_storage/shared_pref_imp/local_storage_shared_pref_imp.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/rest_api/i_rest_api_service.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/rest_api/rest_api_service_factory.dart";
 
@@ -40,4 +43,8 @@ Future<void> initializeResources({
   getIt.registerSingleton<RestApiService>(
     RestApiServiceFactory.createDioService(baseUrl: kApiBaseUrl),
   );
+
+  // Initialize the local storage service
+  final localStorageService = await LocalStorageSharedPrefsImp.withDefaults();
+  getIt.registerSingleton<LocalStorageService>(localStorageService);
 }
