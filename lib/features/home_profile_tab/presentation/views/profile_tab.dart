@@ -3,9 +3,11 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/custom_appbar.dart";
+import "package:nodelabs_caseapp_sinflix/features/add_profile_photo/presentation/views/add_profile_photo_screen.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_bloc.dart"
     show AuthBloc;
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_event.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_state.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_profile_tab/presentation/views/widgets/liked_movie_widget.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_profile_tab/presentation/views/widgets/profile_details_widget.dart";
 import "package:nodelabs_caseapp_sinflix/features/limited_offer_popup/presentation/views/limited_offer_popup.dart";
@@ -52,10 +54,27 @@ class HomeScreenProfileTab extends StatelessWidget {
             SliverPadding(
               padding: EdgeInsets.only(top: 36.64, left: 35.12, right: 26.15),
               sliver: SliverToBoxAdapter(
-                child: ProfileDetailsWidget(
-                  nameSurname: "Berk Akkaya",
-                  userId: "aaa",
-                  onProfileImgChangeClicked: () {},
+                child: BlocBuilder<AuthBloc, AuthState>(
+                  buildWhen: (context, state) => state is AuthenticatedState,
+                  builder: (context, state) {
+                    if (state is! AuthenticatedState) {
+                      return Center(
+                        child: Text("Kullanıcı bilgisi alınıyor..."),
+                      );
+                    }
+
+                    final profileImgUrl = state.user.photoUrl;
+
+                    return ProfileDetailsWidget(
+                      nameSurname: state.user.nameSurname,
+                      userId: state.user.userId,
+                      profileImgProvider: profileImgUrl != null
+                          ? CachedNetworkImageProvider(profileImgUrl)
+                          : null,
+                      onProfileImgChangeClicked: () =>
+                          goToProfileImgChangeScreen(context),
+                    );
+                  },
                 ),
               ),
             ),
@@ -116,6 +135,12 @@ class HomeScreenProfileTab extends StatelessWidget {
       context: context,
       isScrollControlled: true,
       builder: (context) => LimitedOfferPopup(),
+    );
+  }
+
+  void goToProfileImgChangeScreen(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (context) => const AddProfilePhotoScreen()),
     );
   }
 }
