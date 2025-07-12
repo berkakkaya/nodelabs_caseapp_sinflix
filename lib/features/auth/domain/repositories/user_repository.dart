@@ -32,6 +32,9 @@ abstract class UserRepository {
   /// Checks if a user is currently signed in.
   Future<bool> isSignedIn();
 
+  /// Retrieves the current authentication token.
+  Future<String?> getCurrentToken();
+
   /// Uploads a profile photo for the current user.
   Future<String?> uploadProfilePhoto(Uint8List bytes, String fileName);
 }

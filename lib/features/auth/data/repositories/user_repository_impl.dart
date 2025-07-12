@@ -63,8 +63,13 @@ class UserRepositoryImpl implements UserRepository {
   }
 
   @override
+  Future<String?> getCurrentToken() {
+    return tokenDataSource.getToken();
+  }
+
+  @override
   Future<bool> isSignedIn() async {
-    final token = await tokenDataSource.getToken();
+    final token = await getCurrentToken();
     return token != null;
   }
 
