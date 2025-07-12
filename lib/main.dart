@@ -9,15 +9,17 @@ import "package:nodelabs_caseapp_sinflix/core/services/service_locator.dart"
 import "package:nodelabs_caseapp_sinflix/features/auth/data/datasources/token_data_source.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/data/datasources/user_data_source.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/data/repositories/user_repository_impl.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/get_current_token_usecase.dart"
+    show GetCurrentTokenUseCase;
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/get_current_user_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/is_signed_in_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/sign_in_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/sign_out_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/sign_up_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/upload_profile_photo_usecase.dart";
-import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_bloc.dart";
-import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_event.dart";
-import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_state.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_bloc.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_event.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_state.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/views/sign_in_screen.dart";
 
@@ -97,6 +99,7 @@ class App extends StatelessWidget {
       signUpUseCase: SignUpUseCase(authRepository),
       signOutUseCase: SignOutUseCase(authRepository),
       getCurrentUserUseCase: GetCurrentUserUseCase(authRepository),
+      getCurrentTokenUseCase: GetCurrentTokenUseCase(authRepository),
       isSignedInUseCase: IsSignedInUseCase(authRepository),
       uploadProfilePhotoUseCase: UploadProfilePhotoUseCase(authRepository),
     )..add(InitAuthStateEvent());
