@@ -33,7 +33,6 @@ class _SignInScreenState extends State<SignInScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final filledButtonTheme = Theme.of(context).filledButtonTheme;
     final textTheme = Theme.of(context).textTheme;
     final authBloc = context.read<AuthBloc>();
 
