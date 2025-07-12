@@ -8,16 +8,6 @@ import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
 /// a 1:1 aspect ratio, making it perfect for profile photo selection
 /// interfaces. It features Material Design touch feedback and can display
 /// either a placeholder icon (like a plus sign) or an actual profile image.
-///
-/// The widget features:
-/// - 1:1 aspect ratio container for consistent sizing
-/// - Rounded corners with 31px border radius
-/// - Semi-transparent background with subtle border
-/// - Material Design ripple effects on tap
-/// - 40px padding for comfortable touch targets
-/// - Flexible content support via child widget
-/// - Optional tap callback for interaction
-/// ```
 class AddProfilePhotoWidget extends StatelessWidget {
   /// The widget to display inside the profile photo container.
   ///
@@ -48,7 +38,6 @@ class AddProfilePhotoWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(borderRadiusValue),
           onTap: onTap,
           child: Container(
-            padding: EdgeInsets.all(40),
             decoration: BoxDecoration(
               color: kColorWhiteA10,
               borderRadius: BorderRadius.circular(borderRadiusValue),
@@ -58,7 +47,10 @@ class AddProfilePhotoWidget extends StatelessWidget {
                 strokeAlign: BorderSide.strokeAlignInside,
               ),
             ),
-            child: child,
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(borderRadiusValue),
+              child: child,
+            ),
           ),
         ),
       ),
