@@ -1,10 +1,16 @@
 import "package:flutter/material.dart";
+import "package:flutter_bloc/flutter_bloc.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/custom_text_field.dart";
 import "package:nodelabs_caseapp_sinflix/core/widgets/flexible_row_spacer.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_bloc.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_event.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_state.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/pw_field/pw_field_bloc.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/pw_field/pw_field_event.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/pw_field/pw_field_state.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/widgets/social_media_buttons_group.dart";
-import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/views/sign_up_screen.dart";
 
 class SignInScreen extends StatefulWidget {
@@ -15,9 +21,21 @@ class SignInScreen extends StatefulWidget {
 }
 
 class _SignInScreenState extends State<SignInScreen> {
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final filledButtonTheme = Theme.of(context).filledButtonTheme;
     final textTheme = Theme.of(context).textTheme;
+    final authBloc = context.read<AuthBloc>();
 
     return Scaffold(
       body: CustomScrollView(
@@ -46,16 +64,36 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   SizedBox(height: 40),
                   CustomTextField(
+                    controller: emailController,
                     labelText: "E-posta",
                     prefixIcon: Icon(CustomIcons.messageOutlined),
                     keyboardType: TextInputType.emailAddress,
                   ),
                   SizedBox(height: 13.63),
-                  CustomTextField(
-                    labelText: "Şifre",
-                    prefixIcon: Icon(CustomIcons.unlockOutlined),
-                    suffixIcon: Icon(CustomIcons.hideOutlined),
-                    obscureText: true,
+                  BlocProvider(
+                    create: (context) => PwFieldBloc(),
+                    child: BlocBuilder<PwFieldBloc, PwFieldState>(
+                      builder: (context, state) {
+                        return CustomTextField(
+                          controller: passwordController,
+                          labelText: "Şifre",
+                          prefixIcon: Icon(CustomIcons.unlockOutlined),
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              final isHidden = state is PwFieldHidden;
+
+                              context.read<PwFieldBloc>().add(
+                                isHidden
+                                    ? PwFieldShowEvent()
+                                    : PwFieldHideEvent(),
+                              );
+                            },
+                            child: Icon(CustomIcons.hideOutlined),
+                          ),
+                          obscureText: state is PwFieldHidden,
+                        );
+                      },
+                    ),
                   ),
                   SizedBox(height: 29.63),
                   Text(
@@ -67,9 +105,41 @@ class _SignInScreenState extends State<SignInScreen> {
                     textAlign: TextAlign.start,
                   ),
                   SizedBox(height: 24),
-                  FilledButton(
-                    onPressed: goToHomeScreen,
-                    child: Text("Giriş Yap"),
+                  BlocConsumer<AuthBloc, AuthState>(
+                    listener: listenAuthStateChanges,
+                    listenWhen: (previous, current) {
+                      return current is SignInError;
+                    },
+                    builder: (context, state) {
+                      return FilledButton(
+                        onPressed: state is! SigningIn
+                            ? () => authBloc.add(
+                                SignInEvent(
+                                  email: emailController.text,
+                                  password: passwordController.text,
+                                ),
+                              )
+                            : null,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          spacing: 16,
+                          children: [
+                            if (state is SigningIn)
+                              SizedBox.square(
+                                dimension: 12,
+                                child: CircularProgressIndicator(),
+                              ),
+                            Text(
+                              state is SigningIn
+                                  ? "Giriş yapılıyor..."
+                                  : "Giriş Yap",
+                            ),
+                          ],
+                        ),
+                      );
+                    },
                   ),
                   SizedBox(height: 36.92),
                   SocialMediaButtonsGroup(
@@ -107,21 +177,22 @@ class _SignInScreenState extends State<SignInScreen> {
     );
   }
 
-  void goToSignUpScreen() {
-    // TODO: Move function call to a more appropriate place
-
-    Navigator.of(
-      context,
-    ).push(MaterialPageRoute(builder: (context) => SignUpScreen()));
+  void listenAuthStateChanges(BuildContext context, AuthState state) {
+    if (state is SignInError) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            "Oturum açılamadı, lütfen e-posta ve şifrenizi kontrol edin.",
+          ),
+        ),
+      );
+    }
   }
 
-  void goToHomeScreen() {
-    // TODO: Implement proper sign in logic
-    // This is a placeholder for the actual navigation logic.
-
-    Navigator.of(context).pushAndRemoveUntil(
-      MaterialPageRoute(builder: (context) => const HomeScreen()),
-      (route) => false,
+  void goToSignUpScreen() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const SignUpScreen()),
     );
   }
 }
