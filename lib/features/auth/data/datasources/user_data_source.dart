@@ -58,7 +58,7 @@ class UserDataSourceImpl implements UserDataSource {
     final data = {"email": email, "password": password};
 
     final response = await apiService.post(
-      "/login",
+      "/user/login",
       data: ReqInput(type: ReqInputType.json, data: data),
     );
 
@@ -79,7 +79,7 @@ class UserDataSourceImpl implements UserDataSource {
     final data = {"name": name, "email": email, "password": password};
 
     final response = await apiService.post(
-      "/register",
+      "/user/register",
       data: ReqInput(type: ReqInputType.json, data: data),
     );
 
@@ -93,7 +93,7 @@ class UserDataSourceImpl implements UserDataSource {
 
   @override
   Future<UserModel?> getUserProfile() async {
-    final response = await apiService.get("/profile");
+    final response = await apiService.get("/user/profile");
 
     if (response is! ApiSuccessRes) {
       return null;
