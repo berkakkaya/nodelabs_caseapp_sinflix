@@ -10,7 +10,7 @@ abstract class RestApiService {
   /// Runs a GET request to the specified [path].
   ///
   /// [queryParameters] and [headers] are optional parameters for the request.
-  Future<ApiResponse> get(
+  Future<ApiResponse<JsonResponse>> get(
     String path, {
     Map<String, dynamic>? queryParameters,
     Map<String, String>? headers,
@@ -21,7 +21,7 @@ abstract class RestApiService {
   /// [data] is an instance of [ReqInput] that specifies the type of input
   /// (JSON or form data) and the data to be sent. [queryParameters] and
   /// [headers] are optional parameters for the request.
-  Future<ApiResponse> post(
+  Future<ApiResponse<JsonResponse>> post(
     String path, {
     ReqInput? data,
     Map<String, dynamic>? queryParameters,
