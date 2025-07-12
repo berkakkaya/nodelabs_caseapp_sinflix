@@ -1,12 +1,15 @@
 import "package:flutter_bloc/flutter_bloc.dart";
+import "package:get_it/get_it.dart" show GetIt;
+import "package:nodelabs_caseapp_sinflix/core/services/rest_api/i_rest_api_service.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/get_current_token_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/get_current_user_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/is_signed_in_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/sign_in_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/sign_out_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/sign_up_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/usecases/upload_profile_photo_usecase.dart";
-import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_event.dart";
-import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth_state.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_event.dart";
+import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_state.dart";
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignInUseCase signInUseCase;
@@ -14,6 +17,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final SignOutUseCase signOutUseCase;
   final GetCurrentUserUseCase getCurrentUserUseCase;
   final IsSignedInUseCase isSignedInUseCase;
+  final GetCurrentTokenUseCase getCurrentTokenUseCase;
   final UploadProfilePhotoUseCase uploadProfilePhotoUseCase;
 
   AuthBloc({
@@ -22,6 +26,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     required this.signOutUseCase,
     required this.getCurrentUserUseCase,
     required this.isSignedInUseCase,
+    required this.getCurrentTokenUseCase,
     required this.uploadProfilePhotoUseCase,
   }) : super(AuthInitial()) {
     on<InitAuthStateEvent>(_onInitAuthStatus);
@@ -38,7 +43,18 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     try {
       final isSignedIn = await isSignedInUseCase.execute();
       if (isSignedIn) {
+        final token = await getCurrentTokenUseCase.execute();
+
+        final apiService = GetIt.I.get<RestApiService>();
+        apiService.setToken(token);
+
+        if (token == null) {
+          emit(NavigateToSignIn());
+          return;
+        }
+
         final user = await getCurrentUserUseCase.execute();
+
         if (user != null) {
           emit(NavigateToHome(user: user));
         } else {
@@ -49,6 +65,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       }
     } catch (e) {
       emit(NavigateToSignIn());
+      rethrow;
     }
   }
 
@@ -69,6 +86,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(NavigateToHome(user: user));
     } catch (e) {
       emit(SignInError(message: e.toString()));
+      rethrow;
     }
   }
 
@@ -90,6 +108,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(NavigateToHome(user: user));
     } catch (e) {
       emit(SignUpError(message: e.toString()));
+      rethrow;
     }
   }
 
@@ -116,6 +135,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       emit(ProfilePhotoUploadError(message: "Invalid photo upload"));
     } catch (e) {
       emit(ProfilePhotoUploadError(message: e.toString()));
+      rethrow;
     }
   }
 }
