@@ -34,7 +34,11 @@ final appTheme = ThemeData(
   ),
   filledButtonTheme: FilledButtonThemeData(
     style: ButtonStyle(
-      backgroundColor: WidgetStatePropertyAll(kColorBrand),
+      backgroundColor: WidgetStateProperty.resolveWith<Color?>(
+        (states) => states.contains(WidgetState.disabled)
+            ? kColorWhiteA10
+            : kColorBrand,
+      ),
       foregroundColor: WidgetStatePropertyAll(kColorWhite),
       padding: WidgetStatePropertyAll(EdgeInsets.all(17.16)),
       shape: WidgetStatePropertyAll(
@@ -60,5 +64,15 @@ final appTheme = ThemeData(
         ),
       ),
     ),
+  ),
+  snackBarTheme: SnackBarThemeData(
+    backgroundColor: kColorBlackA75,
+    contentTextStyle: GoogleFonts.poppins(
+      color: kColorWhite,
+      fontSize: 12,
+      fontWeight: FontWeight.w400,
+    ),
+    actionTextColor: kColorBrand,
+    showCloseIcon: true,
   ),
 );
