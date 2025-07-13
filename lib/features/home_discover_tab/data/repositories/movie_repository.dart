@@ -5,13 +5,13 @@ import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/repos
 
 /// Implementation of [DiscoverRepository] that uses a [MovieDatasource]
 /// to fetch and manage movie data.
-class MovieRepositoryImpl implements DiscoverRepository {
+class DiscoverRepositoryImpl implements DiscoverRepository {
   final MovieDatasource _dataSource;
 
-  /// Creates a new instance of [MovieRepositoryImpl].
+  /// Creates a new instance of [DiscoverRepositoryImpl].
   ///
   /// [dataSource] - The data source for movie data.
-  const MovieRepositoryImpl({required MovieDatasource dataSource})
+  const DiscoverRepositoryImpl({required MovieDatasource dataSource})
     : _dataSource = dataSource;
 
   @override
