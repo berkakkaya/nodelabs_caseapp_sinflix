@@ -38,7 +38,6 @@ class HomeDiscoverTab extends StatelessWidget {
             ),
           );
         } else if (state is MoviesLoadedState) {
-          if (state is MovieLikeToggledState) {}
           return PageView.builder(
             key: PageStorageKey("home_discover_tab_page_view"),
             scrollDirection: Axis.vertical,
