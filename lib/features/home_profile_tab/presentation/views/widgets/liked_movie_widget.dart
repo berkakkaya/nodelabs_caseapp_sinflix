@@ -25,7 +25,18 @@ class LikedMovieWidget extends StatelessWidget {
             aspectRatio: 153.13 / 213.82,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8),
-              child: Image(image: posterImgProvider, fit: BoxFit.cover),
+              child: Image(
+                image: posterImgProvider,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return DecoratedBox(
+                    decoration: BoxDecoration(color: kColorWhiteA20),
+                    child: const Center(
+                      child: Icon(Icons.error, color: kColorWhite, size: 48),
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
