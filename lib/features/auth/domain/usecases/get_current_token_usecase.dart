@@ -1,3 +1,5 @@
+import "package:get_it/get_it.dart";
+import "package:nodelabs_caseapp_sinflix/core/services/logging/i_logging_service.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/repositories/user_repository.dart"
     show UserRepository;
 
@@ -11,6 +13,9 @@ class GetCurrentTokenUseCase {
   GetCurrentTokenUseCase(this.repository);
 
   Future<String?> execute() {
+    final logger = GetIt.instance.get<LoggingService>();
+    logger.i("Executing GetCurrentTokenUseCase");
+
     return repository.getCurrentToken();
   }
 }

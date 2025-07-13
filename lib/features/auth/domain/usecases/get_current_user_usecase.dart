@@ -1,4 +1,5 @@
 import "package:get_it/get_it.dart" show GetIt;
+import "package:nodelabs_caseapp_sinflix/core/services/logging/i_logging_service.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/rest_api/i_rest_api_service.dart"
     show RestApiService;
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/entities/user.dart";
@@ -21,10 +22,14 @@ class GetCurrentUserUseCase {
   GetCurrentUserUseCase(this.repository);
 
   Future<User?> execute() async {
+    final logger = GetIt.I.get<LoggingService>();
+    logger.i("Executing GetCurrentTokenUseCase");
+
     final user = await repository.getCurrentUser();
 
     // If user could not be retrieved, log out the user
     if (user == null) {
+      logger.w("GetCurrentTokenUseCase: No user found, signing out.");
       await repository.signOut();
 
       final apiService = GetIt.I.get<RestApiService>();
