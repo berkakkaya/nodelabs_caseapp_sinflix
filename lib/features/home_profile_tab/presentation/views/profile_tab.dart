@@ -70,7 +70,7 @@ class HomeScreenProfileTab extends StatelessWidget {
                 padding: EdgeInsets.only(top: 36.64, left: 35.12, right: 26.15),
                 sliver: SliverToBoxAdapter(
                   child: BlocBuilder<AuthBloc, AuthState>(
-                    buildWhen: (context, state) => state is AuthenticatedState,
+                    buildWhen: (previous, current) => current is AuthenticatedState,
                     builder: (context, state) {
                       if (state is! AuthenticatedState) {
                         return Center(
