@@ -65,7 +65,7 @@ class ProfileDetailsWidget extends StatelessWidget {
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
             ),
           ),
-          onPressed: () {},
+          onPressed: onProfileImgChangeClicked,
           child: Text("Fotoğraf Ekle"),
         ),
       ],
