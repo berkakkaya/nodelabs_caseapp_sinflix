@@ -1,3 +1,7 @@
+import "package:firebase_analytics/firebase_analytics.dart";
+import "package:firebase_analytics/observer.dart";
+import "package:firebase_core/firebase_core.dart";
+import "package:firebase_crashlytics/firebase_crashlytics.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
@@ -24,12 +28,14 @@ import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/au
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_state.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/views/sign_in_screen.dart";
+import "package:nodelabs_caseapp_sinflix/firebase_options.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize service locator
   await service_locator.initializeResources();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Get logging service to set up error handlers
   final loggingService = GetIt.instance.get<LoggingService>();
@@ -37,11 +43,16 @@ void main() async {
   // Set up Flutter error handler
   FlutterError.onError = (details) {
     loggingService.e("Flutter error", details.exception, details.stack);
+
+    // Send it to the Firebase Crashlytics if available
+    FirebaseCrashlytics.instance.recordFlutterFatalError(details);
   };
 
   // Set up Platform error handler
   PlatformDispatcher.instance.onError = (error, stack) {
     loggingService.e("Platform error", error, stack);
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+
     return true;
   };
 
@@ -60,6 +71,9 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: "SinFlix",
         darkTheme: appTheme,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+        ],
         home: BlocBuilder<AuthBloc, AuthState>(
           buildWhen: (previous, current) {
             // Only rebuild when auth state change
