@@ -62,15 +62,32 @@ class MoviesLoadedState extends MovieState {
   }
 }
 
-class MovieLikeToggledState extends MovieState {
-  final String movieId;
+class MovieLikeToggledState extends MoviesLoadedState {
+  final String favoriteMovieId;
   final bool isFavorited;
 
-  const MovieLikeToggledState({
-    required this.movieId,
+  MovieLikeToggledState({
+    required this.favoriteMovieId,
     required this.isFavorited,
-  });
+    List<Movie>? movies,
+    int? currentPage,
+    int? totalPages,
+    super.hasReachedEnd,
+    super.isLoadingMore,
+  }) : super(
+         movies: movies ?? [],
+         currentPage: currentPage ?? 0,
+         totalPages: totalPages ?? 0,
+       );
 
   @override
-  List<Object?> get props => [movieId, isFavorited];
+  List<Object?> get props => [
+    favoriteMovieId,
+    isFavorited,
+    movies,
+    currentPage,
+    totalPages,
+    hasReachedEnd,
+    isLoadingMore,
+  ];
 }

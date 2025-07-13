@@ -13,8 +13,7 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   // Constants for pagination control
   static const int _initialPage = 1;
-  static const int _loadMoreThreshold =
-      5; // Load more when user reaches this close to the end
+  static const int _loadMoreThreshold = 5;
 
   MovieBloc({
     required this.getMoviesUsecase,
@@ -59,46 +58,30 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     final currentState = state;
 
     if (currentState is MoviesLoadedState) {
-      // Don't load more if we're already loading
       if (currentState.isLoadingMore) {
         return;
       }
 
-      // Mark as loading more
       emit(currentState.copyWith(isLoadingMore: true));
 
       try {
-        // Calculate next page - if we've reached the end, start over from page 1
         final nextPage = currentState.currentPage >= currentState.totalPages
-            ? _initialPage // Cycle back to first page
+            ? _initialPage
             : currentState.currentPage + 1;
 
         final pagination = await getMoviesUsecase(pagination: nextPage);
-
-        // Create the updated movie list
-        List<Movie> updatedMovies;
-
-        // If we're starting over from page 1, append the new movies to the existing list
-        // to maintain continuous scrolling
-        if (nextPage == _initialPage) {
-          updatedMovies = [...currentState.movies, ...pagination.movies];
-        } else {
-          // Normal case, just append the new page
-          updatedMovies = [...currentState.movies, ...pagination.movies];
-        }
+        final updatedMovies = [...currentState.movies, ...pagination.movies];
 
         emit(
           MoviesLoadedState(
             movies: updatedMovies,
             currentPage: pagination.currentPage,
             totalPages: pagination.totalPages,
-            // Never mark as reached end to allow infinite scrolling
             hasReachedEnd: false,
             isLoadingMore: false,
           ),
         );
       } catch (e) {
-        // Restore previous state but mark as not loading
         emit(currentState.copyWith(isLoadingMore: false));
         emit(MovieErrorState(message: e.toString()));
       }
@@ -136,8 +119,6 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     final currentState = state;
 
     if (currentState is MoviesLoadedState) {
-      // Check if we need to load more movies
-      // We load more when user is approaching the end of the list
       if (!currentState.isLoadingMore &&
           event.index >= currentState.movies.length - _loadMoreThreshold) {
         add(LoadMoreMoviesEvent());
@@ -151,33 +132,70 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
     Emitter<MovieState> emit,
   ) async {
     try {
-      final isFavorited = await toggleFavoriteUsecase(event.movieId);
+      final currentState = state;
+      if (currentState is! MoviesLoadedState) {
+        return;
+      }
 
-      // Emit toggle state
-      emit(
-        MovieLikeToggledState(movieId: event.movieId, isFavorited: isFavorited),
+      // Find the movie
+      final movie = currentState.movies.firstWhere(
+        (m) => m.movieId == event.movieId,
+        orElse: () => throw Exception("Movie not found: ${event.movieId}"),
       );
 
-      // Update movie list if needed
-      if (state is MoviesLoadedState) {
-        final currentState = state as MoviesLoadedState;
+      // Perform optimistic update
+      final tempIsFavorited = !movie.isFavorite;
+      final immediateUpdatedMovies = currentState.movies.map((m) {
+        if (m.movieId == event.movieId) {
+          return Movie(
+            movieId: m.movieId,
+            posterUrl: m.posterUrl,
+            title: m.title,
+            description: m.description,
+            isFavorite: tempIsFavorited,
+          );
+        }
+        return m;
+      }).toList();
 
-        // Update the favorite status in the current list
-        final updatedMovies = currentState.movies.map((movie) {
-          if (movie.movieId == event.movieId) {
-            // Create a new movie with updated favorite status
+      // Emit optimistic update immediately
+      emit(
+        MoviesLoadedState(
+          movies: immediateUpdatedMovies,
+          currentPage: currentState.currentPage,
+          totalPages: currentState.totalPages,
+          hasReachedEnd: currentState.hasReachedEnd,
+          isLoadingMore: currentState.isLoadingMore,
+        ),
+      );
+
+      // Make the actual API call
+      final actualIsFavorited = await toggleFavoriteUsecase(event.movieId);
+
+      // If API result differs from optimistic update, correct the state
+      if (tempIsFavorited != actualIsFavorited) {
+        final actualUpdatedMovies = immediateUpdatedMovies.map((m) {
+          if (m.movieId == event.movieId) {
             return Movie(
-              movieId: movie.movieId,
-              posterUrl: movie.posterUrl,
-              title: movie.title,
-              description: movie.description,
-              isFavorite: isFavorited,
+              movieId: m.movieId,
+              posterUrl: m.posterUrl,
+              title: m.title,
+              description: m.description,
+              isFavorite: actualIsFavorited,
             );
           }
-          return movie;
+          return m;
         }).toList();
 
-        emit(currentState.copyWith(movies: updatedMovies));
+        emit(
+          MoviesLoadedState(
+            movies: actualUpdatedMovies,
+            currentPage: currentState.currentPage,
+            totalPages: currentState.totalPages,
+            hasReachedEnd: currentState.hasReachedEnd,
+            isLoadingMore: currentState.isLoadingMore,
+          ),
+        );
       }
     } catch (e) {
       emit(MovieErrorState(message: e.toString()));
