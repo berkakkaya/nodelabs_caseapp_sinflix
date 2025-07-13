@@ -1,19 +1,56 @@
-
 import "package:flutter/material.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/colors.dart";
 import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 
-class MovieView extends StatelessWidget {
+class MovieView extends StatefulWidget {
   final ImageProvider imgProvider;
   final String title;
   final String description;
+  final bool isLiked;
+  final void Function()? onLikeToggle;
 
   const MovieView({
     super.key,
     required this.imgProvider,
     required this.title,
     required this.description,
+    this.isLiked = false,
+    this.onLikeToggle,
   });
+
+  @override
+  State<MovieView> createState() => _MovieViewState();
+}
+
+class _MovieViewState extends State<MovieView> {
+  late bool _isLiked;
+
+  @override
+  void initState() {
+    super.initState();
+    _isLiked = widget.isLiked;
+  }
+
+  @override
+  void didUpdateWidget(MovieView oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // Update local state if prop changes from parent
+    if (oldWidget.isLiked != widget.isLiked) {
+      _isLiked = widget.isLiked;
+    }
+  }
+
+  void _handleLikeToggle() {
+    // Update local state immediately for responsive UI
+    setState(() {
+      _isLiked = !_isLiked;
+    });
+
+    // Notify parent about the change
+    if (widget.onLikeToggle != null) {
+      widget.onLikeToggle!();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,8 +59,16 @@ class MovieView extends StatelessWidget {
         children: [
           Positioned.fill(
             child: Image(
-              image: imgProvider,
+              image: widget.imgProvider,
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  color: kColorBlack,
+                  child: const Center(
+                    child: Icon(Icons.error, color: kColorWhite, size: 48),
+                  ),
+                );
+              },
               frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
                 if (wasSynchronouslyLoaded) {
                   return child;
@@ -65,8 +110,8 @@ class MovieView extends StatelessWidget {
             left: 0,
             right: 0,
             child: _MovieDescriptionWidget(
-              title: title,
-              description: description,
+              title: widget.title,
+              description: widget.description,
             ),
           ),
           Positioned(
@@ -74,7 +119,7 @@ class MovieView extends StatelessWidget {
             right: 16.49,
             width: 49.18,
             height: 71.17,
-            child: _LikeButton(),
+            child: _LikeButton(isLiked: _isLiked, onTap: _handleLikeToggle),
           ),
         ],
       ),
@@ -83,12 +128,17 @@ class MovieView extends StatelessWidget {
 }
 
 class _LikeButton extends StatelessWidget {
-  const _LikeButton();
+  final bool isLiked;
+  final void Function()? onTap;
+
+  const _LikeButton({required this.isLiked, this.onTap});
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: kColorBlack.withValues(alpha: 0.60),
+      color: isLiked
+          ? Colors.pink.withValues(alpha: 0.60)
+          : kColorBlack.withValues(alpha: 0.60),
       shape: StadiumBorder(
         side: BorderSide(
           color: kColorWhiteA20,
@@ -98,10 +148,29 @@ class _LikeButton extends StatelessWidget {
       ),
       child: InkWell(
         borderRadius: BorderRadius.circular(35.585),
-        onTap: () {
-          // TODO: Implement like button tap
-        },
-        child: Center(child: Icon(CustomIcons.like, size: 24)),
+        onTap: onTap,
+        splashColor: isLiked
+            ? Colors.pink.withAlpha(100)
+            : kColorWhite.withAlpha(100),
+        highlightColor: isLiked
+            ? Colors.pink.withAlpha(70)
+            : kColorWhite.withAlpha(70),
+        child: Center(
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return ScaleTransition(scale: animation, child: child);
+            },
+            child: Icon(
+              CustomIcons.like,
+              key: ValueKey<bool>(isLiked),
+              size: 24,
+              color: isLiked
+                  ? Colors.white
+                  : kColorWhite.withValues(alpha: 0.80),
+            ),
+          ),
+        ),
       ),
     );
   }
