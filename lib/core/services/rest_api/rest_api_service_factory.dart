@@ -10,6 +10,12 @@ class RestApiServiceFactory {
     Dio? dio,
     BaseOptions? options,
   }) {
-    return DioRestApiServiceImp(baseUrl: baseUrl, dio: dio, options: options);
+    final dioInstance = dio ?? Dio();
+
+    return DioRestApiServiceImp(
+      baseUrl: baseUrl,
+      dio: dioInstance,
+      options: options,
+    );
   }
 }

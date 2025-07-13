@@ -1,8 +1,14 @@
+import "package:firebase_analytics/firebase_analytics.dart";
+import "package:firebase_analytics/observer.dart";
+import "package:firebase_core/firebase_core.dart";
+import "package:firebase_crashlytics/firebase_crashlytics.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:get_it/get_it.dart" show GetIt;
 import "package:nodelabs_caseapp_sinflix/core/consts/theming.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/local_storage/i_local_storage_service.dart";
+import "package:nodelabs_caseapp_sinflix/core/services/logging/i_logging_service.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/rest_api/i_rest_api_service.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/service_locator.dart"
     as service_locator;
@@ -22,12 +28,33 @@ import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/au
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/bloc/auth/auth_state.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_screen/presentation/views/home_screen.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/presentation/views/sign_in_screen.dart";
+import "package:nodelabs_caseapp_sinflix/firebase_options.dart";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize service locator
   await service_locator.initializeResources();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Get logging service to set up error handlers
+  final loggingService = GetIt.instance.get<LoggingService>();
+
+  // Set up Flutter error handler
+  FlutterError.onError = (details) {
+    loggingService.e("Flutter error", details.exception, details.stack);
+
+    // Send it to the Firebase Crashlytics if available
+    FirebaseCrashlytics.instance.recordFlutterFatalError(details);
+  };
+
+  // Set up Platform error handler
+  PlatformDispatcher.instance.onError = (error, stack) {
+    loggingService.e("Platform error", error, stack);
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+
+    return true;
+  };
 
   runApp(const App());
 }
@@ -44,6 +71,9 @@ class App extends StatelessWidget {
       child: MaterialApp(
         title: "SinFlix",
         darkTheme: appTheme,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: FirebaseAnalytics.instance),
+        ],
         home: BlocBuilder<AuthBloc, AuthState>(
           buildWhen: (previous, current) {
             // Only rebuild when auth state change
@@ -85,6 +115,7 @@ class App extends StatelessWidget {
     final getIt = GetIt.instance;
     final storageService = getIt.get<LocalStorageService>();
     final apiService = getIt.get<RestApiService>();
+    final loggingService = getIt.get<LoggingService>();
 
     final authDataSource = UserDataSourceImpl(apiService: apiService);
     final tokenDataSource = TokenDataSourceImpl(storageService: storageService);
@@ -94,13 +125,15 @@ class App extends StatelessWidget {
       tokenDataSource: tokenDataSource,
     );
 
+    loggingService.d("Creating AuthBloc with dependencies");
+
     return AuthBloc(
       signInUseCase: SignInUseCase(authRepository),
       signUpUseCase: SignUpUseCase(authRepository),
       signOutUseCase: SignOutUseCase(authRepository),
       getCurrentUserUseCase: GetCurrentUserUseCase(authRepository),
-      getCurrentTokenUseCase: GetCurrentTokenUseCase(authRepository),
       isSignedInUseCase: IsSignedInUseCase(authRepository),
+      getCurrentTokenUseCase: GetCurrentTokenUseCase(authRepository),
       uploadProfilePhotoUseCase: UploadProfilePhotoUseCase(authRepository),
     )..add(InitAuthStateEvent());
   }

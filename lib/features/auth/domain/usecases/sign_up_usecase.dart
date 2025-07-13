@@ -1,5 +1,6 @@
 import "package:get_it/get_it.dart" show GetIt;
 import "package:nodelabs_caseapp_sinflix/core/services/local_storage/i_local_storage_service.dart";
+import "package:nodelabs_caseapp_sinflix/core/services/logging/i_logging_service.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/rest_api/i_rest_api_service.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/entities/user.dart";
 import "package:nodelabs_caseapp_sinflix/features/auth/domain/repositories/user_repository.dart";
@@ -22,6 +23,9 @@ class SignUpUseCase {
     required String email,
     required String password,
   }) async {
+    final logger = GetIt.I.get<LoggingService>();
+    logger.i("Executing SignInUseCase with email: $email");
+
     final user = await repository.signUp(
       nameSurname: name,
       email: email,
