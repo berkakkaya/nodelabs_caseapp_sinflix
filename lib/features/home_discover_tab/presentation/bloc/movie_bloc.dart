@@ -1,6 +1,5 @@
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/entities/movie.dart";
-import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/usecases/get_favorite_movies_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/usecases/get_movies_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/usecases/toggle_favorite_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/presentation/bloc/movie_event.dart";
@@ -8,7 +7,6 @@ import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/presentation
 
 class MovieBloc extends Bloc<MovieEvent, MovieState> {
   final GetMoviesUsecase getMoviesUsecase;
-  final GetFavoriteMoviesUsecase getFavoriteMoviesUsecase;
   final ToggleFavoriteUsecase toggleFavoriteUsecase;
 
   // Constants for pagination control
@@ -17,7 +15,6 @@ class MovieBloc extends Bloc<MovieEvent, MovieState> {
 
   MovieBloc({
     required this.getMoviesUsecase,
-    required this.getFavoriteMoviesUsecase,
     required this.toggleFavoriteUsecase,
   }) : super(MovieInitialState()) {
     on<FetchMoviesEvent>(_onFetchMovies);

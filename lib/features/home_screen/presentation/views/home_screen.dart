@@ -5,8 +5,7 @@ import "package:nodelabs_caseapp_sinflix/core/consts/custom_icons.dart";
 import "package:nodelabs_caseapp_sinflix/core/services/rest_api/i_rest_api_service.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/data/datasources/movie_datasource.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/data/repositories/movie_repository.dart";
-import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/usecases/get_favorite_movies_usecase.dart"
-    show GetFavoriteMoviesUsecase;
+
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/usecases/get_movies_usecase.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/usecases/toggle_favorite_usecase.dart"
     show ToggleFavoriteUsecase;
@@ -70,7 +69,6 @@ class HomeScreen extends StatelessWidget {
 
     return MovieBloc(
       getMoviesUsecase: GetMoviesUsecase(repository),
-      getFavoriteMoviesUsecase: GetFavoriteMoviesUsecase(repository),
       toggleFavoriteUsecase: ToggleFavoriteUsecase(repository),
     )..add(FetchMoviesEvent());
   }

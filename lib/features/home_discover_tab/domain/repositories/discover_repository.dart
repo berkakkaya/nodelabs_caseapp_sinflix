@@ -1,5 +1,3 @@
-import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/entities/movie.dart"
-    show Movie;
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/entities/movie_pagination.dart";
 
 /// Repository interface for managing movie data.
@@ -12,7 +10,4 @@ abstract class DiscoverRepository {
 
   /// Toggles favorite status for a movie by its ID.
   Future<bool> toggleFavorite(String movieId);
-
-  /// Fetches a list of favorite movies.
-  Future<List<Movie>> getFavoriteMovies();
 }

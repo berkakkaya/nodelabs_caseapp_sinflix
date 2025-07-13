@@ -1,7 +1,5 @@
 import "package:nodelabs_caseapp_sinflix/core/services/rest_api/i_rest_api_service.dart";
-import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/data/models/movie_model.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/data/models/movie_pagination.dart";
-import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/entities/movie.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/entities/movie_pagination.dart";
 
 /// Interface for the Movie data source that connects to the API.
@@ -18,9 +16,6 @@ abstract class MovieDatasource {
   /// [movieId] - The ID of the movie to toggle favorite status.
   /// Returns true if the movie is favorited, false otherwise.
   Future<bool> toggleFavorite(String movieId);
-
-  /// Fetches a list of favorite movies.
-  Future<List<Movie>> getFavoriteMovies();
 }
 
 /// Implementation of [MovieDatasource] that connects to the API using
@@ -58,30 +53,6 @@ class MovieDatasourceImpl implements MovieDatasource {
       return jsonData["data"]["action"] != "unfavorited";
     } else {
       throw Exception("Failed to toggle favorite: ${response.statusCode}");
-    }
-  }
-
-  @override
-  Future<List<Movie>> getFavoriteMovies() async {
-    final response = await _apiService.get("/movie/favorites");
-
-    if (response.isOk && response.data != null) {
-      final jsonData = response.data!;
-
-      if (jsonData["data"] != null && jsonData["data"] is List) {
-        return (jsonData["data"] as List)
-            .map(
-              (movieJson) =>
-                  MovieModel.fromJson(movieJson as Map<String, dynamic>),
-            )
-            .toList();
-      }
-
-      return [];
-    } else {
-      throw Exception(
-        "Failed to fetch favorite movies: ${response.statusCode}",
-      );
     }
   }
 }

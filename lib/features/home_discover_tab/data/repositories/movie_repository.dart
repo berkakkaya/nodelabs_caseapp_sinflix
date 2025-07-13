@@ -1,5 +1,4 @@
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/data/datasources/movie_datasource.dart";
-import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/entities/movie.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/entities/movie_pagination.dart";
 import "package:nodelabs_caseapp_sinflix/features/home_discover_tab/domain/repositories/discover_repository.dart";
 
@@ -13,11 +12,6 @@ class DiscoverRepositoryImpl implements DiscoverRepository {
   /// [dataSource] - The data source for movie data.
   const DiscoverRepositoryImpl({required MovieDatasource dataSource})
     : _dataSource = dataSource;
-
-  @override
-  Future<List<Movie>> getFavoriteMovies() async {
-    return await _dataSource.getFavoriteMovies();
-  }
 
   @override
   Future<MoviePagination> getMovies({required int pagination}) async {
