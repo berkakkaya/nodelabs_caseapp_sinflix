@@ -16,7 +16,7 @@ class MovieModel extends Movie {
   /// available and skips any URLs that contain the word "imdb".
   factory MovieModel.fromJson(Map<String, dynamic> json) {
     final List<String> posterCandidates = [json["Poster"] as String];
-    posterCandidates.addAll(json["Images"] as List<String>);
+    posterCandidates.addAll((json["Images"]).cast<String>());
 
     // Skip any links that contains the word "imdb"
     final String posterUrl = posterCandidates.firstWhere(
