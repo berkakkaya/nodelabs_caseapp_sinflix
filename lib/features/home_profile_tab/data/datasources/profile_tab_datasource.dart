@@ -10,10 +10,10 @@ abstract class ProfileTabDatasource {
   Future<List<Movie>> getFavoriteMovies();
 }
 
-class MovieDatasourceImpl implements ProfileTabDatasource {
+class ProfileTabDatasourceImpl implements ProfileTabDatasource {
   final RestApiService _apiService;
 
-  MovieDatasourceImpl({required RestApiService apiService})
+  ProfileTabDatasourceImpl({required RestApiService apiService})
     : _apiService = apiService;
 
   @override
