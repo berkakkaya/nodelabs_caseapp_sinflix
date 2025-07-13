@@ -55,10 +55,7 @@ class MovieDatasourceImpl implements MovieDatasource {
 
     if (response.isOk && response.data != null) {
       final jsonData = response.data!;
-
-      // Assuming the API returns a success flag and the new favorite status
-      return jsonData["success"] == true &&
-          jsonData["data"]["movie"]["isFavorite"] == true;
+      return jsonData["data"]["action"] != "unfavorited";
     } else {
       throw Exception("Failed to toggle favorite: ${response.statusCode}");
     }
