@@ -71,15 +71,13 @@ class DioRestApiServiceImp implements RestApiService {
       );
 
       return ApiSuccessRes(data: res.data, statusCode: res.statusCode!);
-    } catch (e) {
-      if (e is DioException) {
-        return ApiErrorRes(
-          statusCode: e.response?.statusCode,
-          data: e.response?.data,
-        );
-      }
+    } on DioException catch (e) {
+      final data = e.response?.data;
 
-      return ApiErrorRes();
+      return ApiErrorRes(
+        statusCode: e.response?.statusCode,
+        data: data is Map<String, dynamic> ? data : null,
+      );
     }
   }
 
@@ -137,15 +135,13 @@ class DioRestApiServiceImp implements RestApiService {
         data: response.data,
         statusCode: response.statusCode!,
       );
-    } catch (e) {
-      if (e is DioException) {
-        return ApiErrorRes(
-          statusCode: e.response?.statusCode,
-          data: e.response?.data,
-        );
-      }
+    } on DioException catch (e) {
+      final data = e.response?.data;
 
-      return ApiErrorRes();
+      return ApiErrorRes(
+        statusCode: e.response?.statusCode,
+        data: data is Map<String, dynamic> ? data : null,
+      );
     }
   }
 }
